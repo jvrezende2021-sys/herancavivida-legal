@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Herança Vivida Publicador — Autorização</title>
+<style>
+body{margin:0;background:#F5EFE6;color:#4A2F1F;font:17px/1.6 Georgia,serif}
+main{max-width:640px;margin:0 auto;padding:48px 24px}
+h1{color:#A0522D;font-size:26px;margin:0 0 12px}
+textarea{width:100%;box-sizing:border-box;height:120px;font:14px/1.4 monospace;padding:10px;border:1px solid #d9c9b3;border-radius:8px;background:#fff;color:#4A2F1F}
+button{margin-top:12px;background:#C0663F;color:#fff;border:0;border-radius:8px;padding:10px 18px;font:600 15px system-ui,sans-serif;cursor:pointer}
+.err{color:#a33}
+</style>
+</head>
+<body><main>
+<h1>Herança Vivida Publicador</h1>
+<div id="out"></div>
+</main>
+<script>
+var p = new URLSearchParams(location.search), out = document.getElementById('out');
+if (p.get('code')) {
+  out.innerHTML = '<p>Autorização concluída. Copie o código abaixo e envie para o Claude (ele expira em poucos minutos).</p>' +
+    '<textarea id="c" readonly></textarea><button id="b">Copiar</button>';
+  var t = document.getElementById('c');
+  t.value = 'code=' + p.get('code') + '\nstate=' + (p.get('state') || '') + '\nscopes=' + (p.get('scopes') || '');
+  document.getElementById('b').onclick = function(){ t.select(); try{navigator.clipboard.writeText(t.value);}catch(e){document.execCommand('copy');} this.textContent='Copiado'; };
+} else if (p.get('error')) {
+  out.innerHTML = '<p class="err"></p>';
+  out.firstChild.textContent = 'Erro: ' + p.get('error') + ' — ' + (p.get('error_description') || '');
+} else {
+  out.innerHTML = '<p>Página de retorno do login do TikTok para a ferramenta interna da Herança Vivida.</p>';
+}
+</script>
+</body>
+</html>
